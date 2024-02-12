@@ -99,9 +99,8 @@ Vagrant.configure("2") do |config|
       python3-pip \
     -y
 
-    pip install \
+    yes | python3 -m pip install \
         git+https://github.com/PDunham113/jaunt.git \
-        mysql-connector-python \
-    -y
+        mysql-connector-python
   SHELL
 end
