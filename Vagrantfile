@@ -90,14 +90,17 @@ Vagrant.configure("2") do |config|
 
     # Create a password-enabled user & give them all permissions
     # TODO: Explicitly give them what they need for migration management
-    mysql -e 'CREATE USER `vagrant`@`%` IDENTIFIED BY `vagrant`;'
-    mysql -e 'GRANT ALL ON *.* TO `vagrant`@`%`;'
+    mysql -e "CREATE USER 'vagrant'@'%' IDENTIFIED BY 'vagrant';"
+    mysql -e "GRANT ALL ON *.* TO 'vagrant'@'%';"
+    mysql -e "FLUSH PRIVILEGES;"
 
     apt-get update
     apt-get install \
       python3 \
       python3-pip \
     -y
+
+    python3 -m pip install --upgrade pip
 
     yes | python3 -m pip install \
         git+https://github.com/PDunham113/jaunt.git \

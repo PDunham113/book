@@ -1,9 +1,9 @@
-DROP TABLE `transaction_stub` IF EXISTS;
+DROP TABLE IF EXISTS `transaction_stub`;
 
-DROP TABLE `transaction` IF EXISTS;
+DROP TABLE IF EXISTS `transaction`;
 
-DROP TABLE `currency` IF EXISTS;
+DROP TABLE IF EXISTS `currency`;
 
-DROP TABLE `category` IF EXISTS;
+DROP TABLE IF EXISTS `category`;
 
-DROP TABLE `account` IF EXISTS;
+DROP TABLE IF EXISTS `account`;
