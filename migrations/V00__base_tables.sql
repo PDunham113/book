@@ -42,8 +42,8 @@ CREATE TABLE `transaction_stub` (
     `acct_id` INT UNSIGNED NOT NULL,
     `amount` DECIMAL(13, 4) NOT NULL,
     `currency_id` INT UNSIGNED NOT NULL,
-    CONSTRAINT `fk_txn_id` FOREIGN KEY (`txn_id`) REFERENCES `transaction`(`id`),
-    CONSTRAINT `fk_acct_id` FOREIGN KEY (`acct_id`) REFERENCES `account`(`id`),
-    CONSTRAINT `fk_currency_id` FOREIGN KEY (`currency_id`) REFERENCES `currency`(`id`),
+    FOREIGN KEY `fk_txn_id` (`txn_id`) REFERENCES `transaction`(`id`),
+    FOREIGN KEY `fk_acct_id` (`acct_id`) REFERENCES `account`(`id`),
+    FOREIGN KEY `fk_currency_id` (`currency_id`) REFERENCES `currency`(`id`),
     PRIMARY KEY (`id`)
 );
