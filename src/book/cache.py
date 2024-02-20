@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from collections import OrderedDict
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Tuple
 
 
 TimedItem = Tuple["Cacheable", datetime]
@@ -43,10 +43,10 @@ class TimedLRU:
         return len(self._cache_byid)
 
     def get(
-        self, id: Optional[int] = None, key: Optional[Dict[str, Any]] = None
-    ) -> Optional[Cacheable]:
+        self, id: int | None = None, key: Dict[str, Any | None] = None
+    ) -> Cacheable | None:
         """Get a Cacheable by id or by key. If both are provided, prefer id."""
-        obj: Optional[Cacheable] = None
+        obj: Cacheable | None = None
         # Make our key hashable
         if key is not None:
             key: TupleKey = tuple(key.items())
