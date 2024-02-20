@@ -1,5 +1,6 @@
 .vagrant
 .vscode
+build
 *.egg-info
 *.pyc
 *__pycache__
