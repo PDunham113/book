@@ -3,7 +3,8 @@ ALTER TABLE `transaction_stub`
 
 
 ALTER TABLE `transaction_stub`
-    DROP FOREIGN KEY `fk_lot_id`,
+    DROP FOREIGN KEY `fk_transaction_stub_lot_id`,
+    DROP INDEX `fk_transaction_stub_lot_id`,
     DROP COLUMN `purchase_amt`,
     DROP COLUMN `lot_id`;
 
