@@ -62,7 +62,11 @@ Vagrant.configure("2") do |config|
     export DEBIAN_FRONTEND=noninteractive
 
     apt update
-    apt install -y debconf-utils
+    apt install \
+      debconf-utils \
+      python3 \
+      python3-pip \
+    -y
 
     debconf-set-selections
     echo 'mysql-apt-config mysql-apt-config/repo-codename select jammy' > debconf-set-selections
@@ -85,8 +89,8 @@ Vagrant.configure("2") do |config|
 
     wget -q $MYSQL_LIB_URL -O $MYSQL_LIB
     apt install $MYSQL_LIB
-    apt update
-    apt install -y mysql-server
+    apt-get update
+    apt-get install -y mysql-server
 
     # Create a password-enabled user & give them all permissions
     # TODO: Explicitly give them what they need for migration management
@@ -94,16 +98,17 @@ Vagrant.configure("2") do |config|
     mysql -e "GRANT ALL ON *.* TO 'vagrant'@'%';"
     mysql -e "FLUSH PRIVILEGES;"
 
-    apt-get update
-    apt-get install \
-      python3 \
-      python3-pip \
-    -y
-
     python3 -m pip install --upgrade pip
 
     yes | python3 -m pip install \
         git+https://github.com/PDunham113/jaunt.git \
         mysql-connector-python
+
+    # Personal stuff
+    apt-get install \
+      ipython3 \
+    -y
+    yes | python3 -m pip install \
+      black
   SHELL
 end
