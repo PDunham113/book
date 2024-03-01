@@ -63,7 +63,7 @@ class TimedLRU:
             if obj is not None:
                 self._cache_byid.pop(obj.id)
 
-        if last_accessed + self.timeout < datetime.now():
+        if self.timeout > timedelta(seconds=0)  and last_accessed + self.timeout < datetime.now():
             # Cache element is too old
             # TODO: Should I purge all old elements?
             obj = None
@@ -78,7 +78,7 @@ class TimedLRU:
         # Make our key hashable
         key: TupleKey = tuple(obj.key.items())
 
-        while self.size >= self.max_size:
+        while self.size >= self.max_size and self.max_size > 0:
             for cache in (self._cache_byid, self._cache_bykey):
                 cache.popitem(last=False)
         now = datetime.now()

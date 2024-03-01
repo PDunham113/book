@@ -2,6 +2,7 @@
 import string
 import time
 import unittest
+from datetime import timedelta
 from typing import Dict
 
 import book.cache
@@ -80,6 +81,20 @@ class TestCache(unittest.TestCase):
             book.cache.CacheError, msg="Cache doesn't report size mismatch"
         ):
             self.cache.size
+
+    def test_nolimits(self):
+        """Tests disabling max_size & timeout"""
+        self.cache.max_size = 0
+        self.cache.timeout = timedelta(seconds=0)
+
+        for i, item in enumerate(self.items, 1):
+            self.cache.add(item)
+            self.assertEqual(self.cache.size, i, f"Failed on add {i}")
+
+        time.sleep(self.CACHE_TIMEOUT + 0.5)
+        self.assertEqual(self.cache.get(id=0), self.items[0], "Element timed out")
+
+
 
 
 if __name__ == "__main__":
