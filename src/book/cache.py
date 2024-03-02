@@ -42,6 +42,19 @@ class TimedLRU:
             raise CacheError("Cache is out of whack!")
         return len(self._cache_byid)
 
+    def add(self, obj: Cacheable) -> None:
+        """Add a Cacheable to the cache. If it's there, mark it as most recently used."""
+        # Make our key hashable
+        key: TupleKey = tuple(obj.key.items())
+
+        while self.size >= self.max_size and self.max_size > 0:
+            for cache in (self._cache_byid, self._cache_bykey):
+                cache.popitem(last=False)
+        now = datetime.now()
+        for cache, k in ((self._cache_byid, obj.id), (self._cache_bykey, key)):
+            cache[k] = (obj, now)
+            cache.move_to_end(k)
+
     def get(
         self, id: int | None = None, key: Dict[str, Any | None] = None
     ) -> Cacheable | None:
@@ -73,15 +86,14 @@ class TimedLRU:
 
         return obj
 
-    def add(self, obj: Cacheable) -> None:
-        """Add a Cacheable to the cache. If it's there, mark it as most recently used."""
-        # Make our key hashable
-        key: TupleKey = tuple(obj.key.items())
+    def pop(
+        self, id: int | None = None, key: Dict[str, Any | None] = None
+    ) -> Cacheable | None:
+        """Get and drop a Cacheable by id or by key. If both are provided, prefer id."""
+        obj = self.get(id=id, key=key)
 
-        while self.size >= self.max_size and self.max_size > 0:
-            for cache in (self._cache_byid, self._cache_bykey):
-                cache.popitem(last=False)
-        now = datetime.now()
-        for cache, k in ((self._cache_byid, obj.id), (self._cache_bykey, key)):
-            cache[k] = (obj, now)
-            cache.move_to_end(k)
+        if obj is not None:
+            self._cache_byid.pop(obj.id)
+            self._cache_bykey.pop(tuple(obj.key.items()))
+
+        return obj

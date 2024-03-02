@@ -62,9 +62,19 @@ class TestCache(unittest.TestCase):
         self.assertEqual(self.cache.get(id=1), None, "Element was there?")
 
         self.assertEqual(
-            self.cache.get(key={"name": "a"}), self.items[0], "Element wasn't there"
+            self.cache.get(key={"name": "a"}), self.items[0], "Element wasn't there/get"
         )
-        self.assertEqual(self.cache.get(key={"name": "b"}), None, "Element was there?")
+        self.assertEqual(
+            self.cache.pop(key={"name": "a"}), self.items[0], "Element wasn't there/pop"
+        )
+        self.assertEqual(
+            self.cache.pop(key={"name": "a"}), None, "Couldn't pop what wasn't"
+        )
+        self.assertEqual(
+            self.cache.get(key={"name": "a"}), None, "Element was there?/a"
+        )
+        self.assertEqual(self.cache.size, 0, "Pop didn't pop!")
+        self.assertEqual(self.cache.get(key={"name": "b"}), None, "Element was there?/b")
 
     def test_timeout(self):
         """Tests that cache elements time out"""
@@ -93,8 +103,6 @@ class TestCache(unittest.TestCase):
 
         time.sleep(self.CACHE_TIMEOUT + 0.5)
         self.assertEqual(self.cache.get(id=0), self.items[0], "Element timed out")
-
-
 
 
 if __name__ == "__main__":
